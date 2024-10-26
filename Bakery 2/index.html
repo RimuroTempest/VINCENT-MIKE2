@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>John's Bakery - Custom Cake Order</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Order Your Custom Cake</h1>
+        <form id="cakeOrderForm">
+
+            <label for="flavor">Choose Flavor:</label>
+            <div class="options-container">
+                <label>
+                    <input type="checkbox" name="flavor" value="vanilla" data-price="165">
+                    <img src="vanilla.jpg" alt="Vanilla Cake">
+                    <span>Vanilla</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="flavor" value="chocolate" data-price="200">
+                    <img src="Chocolate.jpg" alt="Chocolate Cake">
+                    <span>Chocolate</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="flavor" value="red-velvet" data-price="225">
+                    <img src="red-velvet.jpg" alt="Red Velvet Cake">
+                    <span>Red Velvet</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="flavor" value="strawberry" data-price="500">
+                    <img src="strawberry.jpg" alt="Strawberry Cake">
+                    <span>Strawberry</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="flavor" value="lemon" data-price="90">
+                    <img src="lemon.jpeg" alt="Lemon Cake">
+                    <span>Lemon</span>
+                </label>
+            </div>
+
+            <label for="size">Choose Size:</label>
+            <div class="options-container">
+                <label>
+                    <input type="radio" name="size" value="6-inch" data-price="90" required>
+                    <span>6 inch</span>
+                </label>
+                <label>
+                    <input type="radio" name="size" value="8-inch" data-price="120" required>
+                    <span>8 inch</span>
+                </label>
+                <label>
+                    <input type="radio" name="size" value="10-inch" data-price="150" required>
+                    <span>10 inch</span>
+                </label>
+                <label>
+                    <input type="radio" name="size" value="12-inch" data-price="200" required>
+                    <span>12 inch</span>
+                </label>
+            </div>
+
+            <label for="design">Choose Design:</label>
+            <div class="options-container">
+                <label>
+                    <input type="checkbox" name="design" value="Yin-Yang" data-price="600">
+                    <img src="Yin-Yang.jfif" alt="Yin-Yang Cake">
+                    <span>Yin-Yang</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="design" value="Unicorn" data-price="1200">
+                    <img src="Unicorn.webp" alt="Unicorn Cake">
+                    <span>Unicorn</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="design" value="Bed of Roses" data-price="600">
+                    <img src="BedofRoses.jpg" alt="Bed of Roses Cake">
+                    <span>Bed of Roses</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="design" value="Gnoomy" data-price="960">
+                    <img src="Book-Worm.jfif" alt="Gnoomy Cake">
+                    <span>Gnoomy</span>
+                </label>
+                <label>
+                    <input type="checkbox" name="design" value="Barbielat" data-price="20000">
+                    <img src="Barbie-Doll-Cake.jfif" alt="Barbielat Cake">
+                    <span>Barbielat</span>
+                </label>
+            </div>
+
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="notes">Additional Notes (Optional):</label>
+            <textarea id="notes" name="notes" rows="4" placeholder="Describe your custom design (optional)"></textarea>
+
+            <div id="totalPrice">Total Price: $0</div>
+            <button type="button" id="confirmButton">Submit Order</button>
+        </form>
+    </div>
+
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">Confirm Your Order</div>
+            <div class="modal-body">
+                <p id="confirmationMessage"></p>
+            </div>
+            <div class="modal-buttons">
+                <button class="confirm-btn" id="confirmOrderBtn">Confirm</button>
+                <button class="cancel-btn" id="cancelOrderBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('cakeOrderForm');
+        const totalPriceDiv = document.getElementById('totalPrice');
+        const confirmButton = document.getElementById('confirmButton');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const confirmOrderBtn = document.getElementById('confirmOrderBtn');
+        const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+
+        function calculateTotal() {
+            let total = 0;
+
+            const selectedFlavors = document.querySelectorAll('input[name="flavor"]:checked');
+            selectedFlavors.forEach(flavor => total += parseFloat(flavor.dataset.price));
+
+            const selectedSize = document.querySelector('input[name="size"]:checked');
+            if (selectedSize) total += parseFloat(selectedSize.dataset.price);
+
+            const selectedDesigns = document.querySelectorAll('input[name="design"]:checked');
+            selectedDesigns.forEach(design => total += parseFloat(design.dataset.price));
+
+            totalPriceDiv.textContent = `Total Price: $${total.toFixed(2)}`;
+        }
+
+        form.addEventListener('change', calculateTotal);
+
+        confirmButton.addEventListener('click', function () {
+            const customerName = document.getElementById('name').value;
+            const totalPrice = totalPriceDiv.textContent;
+
+            confirmationMessage.textContent = `Hi ${customerName}, your total order is ${totalPrice}. Do you want to confirm?`;
+            confirmationModal.style.display = 'flex';
+        });
+
+        confirmOrderBtn.addEventListener('click', function () {
+            alert('Thank you for your order! It has been placed successfully.');
+            confirmationModal.style.display = 'none';
+            form.submit();
+        });
+
+        // Cancel order
+        cancelOrderBtn.addEventListener('click', function () {
+            confirmationModal.style.display = 'none';
+            alert('Your order was canceled.');
+        });
+    </script>
